@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Generate Question Paper{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592; </a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3 class="text-center">Generate Question Paper</h3>
+    <br />
+    <form id="question-paper-form" method="POST" action="{{ url_for('views.auto_generate_qp') }}" class="transparent-bg mx-auto" style="max-width: 600px;"> <!-- Centered form with a max width -->
+        
+        <!-- Examination Type -->
+        <div class="form-group row">
+            <label for="exam_type" class="col-md-4 col-form-label">Examination Type:</label>
+            <div class="col-md-8">
+                <input type="text" name="exam_type" id="exam_type" class="form-control form-control-sm" required placeholder="Enter exam type">
+            </div>
+        </div>
+
+        <!-- Academic Year -->
+        <div class="form-group row">
+            <label for="academic_year" class="col-md-4 col-form-label">Academic Year:</label>
+            <div class="col-md-8">
+                <select name="academic_year" id="academic_year" class="form-control form-control-sm" required>
+                    <option value="">-Select Academic Year-</option>
+                    <option value="{{ current_year - 1 }}-{{ current_year }}">{{ current_year - 1 }}-{{ current_year }}</option>
+                    <option value="{{ current_year }}-{{ current_year + 1 }}">{{ current_year }}-{{ current_year + 1 }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Subject Selection -->
+        <div class="form-group row">
+            <label for="subject" class="col-md-4 col-form-label">Subject:</label>
+            <div class="col-md-4">
+                <select name="subject" id="subject" class="form-control form-control-sm" required>
+                    <option value="">-Select Subject-</option>
+                    {% for subject in subjects %}
+                        <option value="{{ subject.code }}">{{ subject.name }} ({{ subject.code }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Examination Date -->
+        <div class="form-group row">
+            <label for="exam_date" class="col-md-4 col-form-label">Examination Date:</label>
+            <div class="col-md-4">
+                <input type="date" name="exam_date" id="exam_date" class="form-control form-control-sm" required>
+            </div>
+        </div>
+
+        <!-- Max Marks -->
+        <div class="form-group row">
+            <label for="max_marks" class="col-md-4 col-form-label">Max Marks:</label>
+            <div class="col-md-4">
+                <input type="number" name="max_marks" id="max_marks" class="form-control form-control-sm" required placeholder="Enter max marks">
+            </div>
+        </div>
+
+        <!-- Start Time -->
+        <div class="form-group row">
+            <label for="start_time" class="col-md-4 col-form-label">Start Time:</label>
+            <div class="col-md-4">
+                <input type="time" name="start_time" id="start_time" class="form-control form-control-sm">
+            </div>
+        </div>
+
+        <!-- Duration -->
+        <div class="form-group row">
+            <label for="duration" class="col-md-4 col-form-label">Duration:</label>
+            <div class="col-md-4">
+                <input type="number" name="duration" id="duration" class="form-control form-control-sm" required min="1" placeholder="Enter hours">
+            </div>
+        </div>
+
+        <!-- Module -->
+        <div id="module-section">
+            <div class="form-group row module-group">
+                <label for="module-1" class="col-md-3 col-form-label">Module No:</label>
+                <div class="col-md-2 ">
+                    <select name="modules[]" id="module-1" class="form-control form-control-sm" required>
+                        <option value="">Module no.</option>
+                        {% for module in range(1, 6) %}
+                            <option value="{{ module }}">Module {{ module }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="num_questions-1" class="col-form-label">No. of Questions:</label>
+                    <input type="number" name="num_questions[]" id="num_questions-1" class="form-control form-control-sm" min="1" required />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="marks-1" class="col-form-label">Total Marks:</label>
+                    <input type="number" name="module_max_marks[]" id="marks-1" class="form-control form-control-sm" min="1" required />
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Module Button -->
+        <div class="form-group d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 mt-3 mb-3" style="font-size: 0.9rem;" id="add-module">
+                + Add Module
+            </button>
+        </div>
+
+        <!-- Generate Qp Button -->
+        <div class="form-group d-flex justify-content-end">
+            <button type="submit" name="output_format" value="pdf" class="btn btn-outline-light rounded-pill px-4 py-2 mb-5 mr-3" style="font-size: 0.9rem;" id="generate-qp-btn">Generate PDF</button>
+            <button type="submit" name="output_format" value="word" class="btn btn-outline-light rounded-pill px-4 py-2 mb-5" style="font-size: 0.9rem;" id="generate-qp-btn">Generate word</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

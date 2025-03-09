@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Assessment – 2</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            margin: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-width: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .note {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        colgroup col:nth-child(1) {
+            width: 5%;
+        }
+        colgroup col:nth-child(2) {
+            width: 65%;
+        }
+        colgroup col:nth-child(3),
+        colgroup col:nth-child(4),
+        colgroup col:nth-child(5) {
+            width: 10%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .footer .prepared-by {
+            text-align: left;
+        }
+        .footer .approved-by {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/uni.png', _external=True) }}" alt="University Logo">
+    <div class="header">
+        <p>{{ department }}</p>
+        <p>{{ exam_type }}</p>
+    </div>
+
+    <div class="info">
+        <div>
+            <p>Semester: {{ subject.semester }}</p>
+            <p>Course Name: {{ subject.name }} </p>
+            <p>Date: {{ exam_date }} </p>
+        </div>
+        <div>
+            <p>Maximum Marks: {{ max_marks }} </p>
+            <p>Course Code: {{ subject.code }} </p>
+            <p>Time: {{ start_time }} </p>
+        </div>
+    </div>
+
+    <p class="note">NOTE: Answer All Questions</p>
+
+    <table>
+        <colgroup>
+            <col>
+            <col>
+            <col>
+            <col>
+            <col>
+        </colgroup>
+        <tr>
+            <th>Q#</th>
+            <th>Question</th>
+            <th>Marks</th>
+            <th>BL</th>
+            <th>CO</th>
+        </tr>
+        {% set ns = namespace(counter=0) %}
+        {# Loop through each module and its questions sent from the backend #}
+        {% for module, questions in questions_by_module.items() %}
+            {% for question in questions %}
+                {% set ns.counter = ns.counter + 1 %}
+                <tr>
+                    <td>{{ ns.counter }}</td>
+                    <td>
+                        {{ question.content }}
+                        {# Use the question's relationship to display images #}
+                        {% for image in question.images %}
+                            <br>
+                            <img src="{{ url_for('views.uploaded_file', filename=image.filename) }}" 
+                                 alt="Question Image" 
+                                 style="max-width: 300px; height: auto; margin-top: 5px;">
+                        {% endfor %}
+                    </td>
+                    <td>{{ question.marks }}</td>
+                    <td>{{ question.rbt_level }}</td>
+                    <td>{{ question.co_id }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+
+    <div class="footer">
+        <div class="prepared-by">
+            <p>Prepared By: Dr. Loganathan R</p>
+        </div>
+        <div class="approved-by">
+            <p>Approved By: The Principal</p>
+        </div>
+    </div>
+</body>
+</html>

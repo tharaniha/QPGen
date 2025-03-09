@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}View Subjects{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592; </a>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 0 10px;">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="color: aliceblue; margin: 0;">
+            <thead style="background-color: rgba(0, 0, 0, 0.155); border-color: aliceblue;">
+                <tr>
+                    <th style="width: 3%;">#</th>
+                    <th style="width: 20%;">Subject Name</th>
+                    <th style="width: 10%;">Subject Code</th>
+                    <th style="width: 5%;">Sem</th>
+                    <th style="width: 15%;">Department</th>
+                    <th style="width: 15%;">Regulations</th>
+                    <th style="width: 15%;">Teachers</th>
+                    <th style="width: 7%;"></th>
+                    <th style="width: 7%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in subs %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ sub.name }}</td>
+                        <td>{{ sub.code }}</td>
+                        <td>{{ sub.semester }}</td>
+                        <td>{{ sub.department }}</td>
+                        <td>{{ sub.regulations }}</td>
+                        <td>
+                            <ul>
+                                {% for user in sub.users %}
+                                    <li>{{ user.firstname }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <!-- Edit Button -->
+                        <td class="p-1 align-middle">
+                            <form method="post" action="{{ url_for('views.edit_subject', subject_id=sub.id) }}" class="m-0 d-flex align-items-stretch justify-content-stretch">
+                                <button type="submit" class="btn btn-warning w-100 h-100 border-0">
+                                    Edit
+                                </button>
+                            </form>
+                        </td>                   
+                        <!-- Remove Button -->
+                        <td class="p-1 align-middle">
+                            <form method="post" action="{{ url_for('views.remove_subject', subject_id=sub.id) }}"  class="m-0 d-flex align-items-stretch justify-content-stretch">
+                                <button type="submit" class="btn btn-danger w-100 h-100 border-0" onclick="return confirm('Are you sure you want to remove this subject?')">
+                                    Remove
+                                </button>
+                            </form>
+                        </td>
+                                          
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

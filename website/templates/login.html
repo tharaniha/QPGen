@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <form method="POST" class="col-md-4 mx-auto">
+        <h3 class="text-center">Login</h3>
+        <br />
+        
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email" 
+                placeholder="Enter email" 
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input 
+                type="password" 
+                class="form-control" 
+                id="password" 
+                name="password" 
+                placeholder="Enter password" 
+            />
+        </div>
+
+        <br />
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" name="login_type" value="user" class="btn btn-outline-light rounded-pill px-4 py-3" style="font-size: 0.9rem;"> 
+                User Login
+            </button>
+
+            <button type="submit" name="login_type" value="admin" class="btn btn-outline-light rounded-pill px-4 py-3" style="font-size: 0.9rem;"> 
+                Admin Login
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

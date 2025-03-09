@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block backbutton %}
+    {% if current_user.is_admin %}
+        <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592; </a>
+    {% else %}
+        <a class="btn back-button ml-2" href="/teacher_dashboard"> &#8592; </a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h3>My Profile</h3>
+        
+        <div class="profile-details mt-4">
+            <p><strong>Name:</strong> {{ user.firstname }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Designation:</strong> {{ user.designation }}</p>
+            <p><strong>Department:</strong> {{ user.department }}</p>
+            <p><strong>Subjects Assigned:</strong> 
+                <ul>
+                    {% for subject in user.subjects %}
+                        <li class="fs-5">{{ subject.name }}</li>
+                    {% endfor %}
+                </ul>
+            </p>
+            <p> <strong>Admin:</strong>
+                {% if current_user.is_admin %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </p>
+            <p> <strong>Mod:</strong>
+                {% if current_user.is_mod %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </p>
+            
+        </div>
+        
+        <!-- link to edit the profile -->
+        <!-- <a href="{{ url_for('views.profile') }}" class="btn btn-primary mt-3">Edit Profile</a> -->
+    </div>
+{% endblock %}

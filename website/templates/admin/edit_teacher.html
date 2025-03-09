@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Edit User{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/view_teachers"> &#8592;  </a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3 class="mb-3 text-center">Edit staff details</h3>
+    <form method="POST" class="col-md-8 mx-auto mb-5">
+        <div class="form-group d-flex">
+            <label for="name" class="form-label col-md-4">Name:</label>
+            <input type="text" class="form-control col-md-8" id="name" name="name" value="{{ user1.firstname }}" required>
+        </div>
+        <div class="form-group d-flex">
+            <label for="email" class="form-label col-md-4">Email:</label>
+            <input type="email" class="form-control col-md-8" id="email" name="email" value="{{ user1.email }}" required>
+        </div>
+        <div class="form-group d-flex">
+            <label for="is_admin" class="form-label col-md-4">Admin?</label>
+            <select class="form-control col-md-8" id="is_admin" name="is_admin">
+                <option value=True {% if user1.is_admin == True %}selected{% endif %}>Yes</option>
+                <option value=False {% if user1.is_admin == False %}selected{% endif %}>No</option>
+            </select>
+        </div>
+        <div class="form-group d-flex">
+            <label for="designation" class="form-label col-md-4">Designation:</label>
+            <select class="form-control col-md-8" id="designation" name="designation">
+                <option value="Professor" {% if user1.designation == "Professor" %}selected{% endif %}>Professor</option>
+                <option value="Assistant Professor" {% if user1.designation == "Assistant Professor" %}selected{% endif %}>Assistant Professor</option>
+                <option value="Hod" {% if user1.designation == "Hod" %}selected{% endif %}>Hod</option>
+                <option value="Lecturer" {% if user1.designation == "Lecturer" %}selected{% endif %}>Lecturer</option>
+            </select>
+        </div>
+        <div class="form-group d-flex">
+            <label for="is_mod" class="form-label col-md-4">Mod?</label>
+            <select class="form-control col-md-8" id="is_mod" name="is_mod">
+                <option value=True {% if user1.is_mod == True %}selected{% endif %}>Yes</option>
+                <option value=False {% if user1.is_mod == False %}selected{% endif %}>No</option>
+            </select>
+        </div>
+        <div class="form-group d-flex">
+            <label for="department" class="form-label col-md-4">Department:</label>
+            <select class="form-control col-md-8" id="department" name="department">
+                <option value="Computer Science and Engineering (CSE)" {% if user1.department == "Computer Science and Engineering (CSE)" %}selected{% endif %}>Computer Science and Engineering (CSE)</option>
+                <option value="Electronics and Communication Engineering (ECE)" {% if user1.department == "Electronics and Communication Engineering (ECE)" %}selected{% endif %}>Electronics and Communication Engineering (ECE)</option>
+                <option value="Electrical and Electronics Engineering (EEE)" {% if user1.department == "Electrical and Electronics Engineering (EEE)" %}selected{% endif %}>Electrical and Electronics Engineering (EEE)</option>
+                <option value="Mechanical Engineering" {% if user1.department == "Mechanical Engineering" %}selected{% endif %}>Mechanical Engineering</option>
+                <option value="Civil Engineering" {% if user1.department == "Civil Engineering" %}selected{% endif %}>Civil Engineering</option>
+            </select>
+        </div>
+        <div class="form-group d-flex">
+            <label for="experience" class="form-label col-md-4">Experience (Years):</label>
+            <input type="number" class="form-control col-md-8" id="experience" name="experience" value="{{ user1.experience }}" required>
+        </div>
+        
+        <div class="text-right">
+            <button type="submit" name="action" value="edit-user" class="btn btn-outline-light rounded-pill px-3 py-2 mb-5 mt-3" style="font-size: 0.9rem;">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

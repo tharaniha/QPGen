@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %} {{ subject.name }} {% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/view_questions/{{ subject.id }}"> &#8592;  </a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group row">
+            <label for="module_no" class="col-md-4 col-form-label">Module Number</label>
+            <div class="col-md-8">
+                <input type="number" class="form-control" name="module_no" value="{{ question.module_no }}" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="content" class="col-md-4 col-form-label">Question</label>
+            <div class="col-md-8">
+                <textarea class="form-control" name="content" rows="3" required>{{ question.content }}</textarea>
+            
+                {% for image in images %}
+                    <br />
+                    <div class="form-group row">
+                        <div class="col-md-6 d-flex align-items-end">
+                            <img src="{{ url_for('views.uploaded_file', filename=image.filename) }}" 
+                                 alt="Question Image" 
+                                 style="max-width: 75%; height: auto; margin: 10px;">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <div class="form-check">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    id="remove_img{{ loop.index }}" 
+                                    name="remove_img[]" 
+                                    value="{{ image.id }}" 
+                                />
+                                <label class="form-check-label" for="remove_img{{ loop.index }}">Remove</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="new_images" class="col-md-4 col-form-label">Add New Images</label>
+            <div class="col-md-8">
+                <input type="file" class="form-control" id="new_images" name="new_images" accept="image/*" multiple>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="marks" class="col-md-4 col-form-label">Marks</label>
+            <div class="col-md-8">
+                <input type="number" class="form-control" name="marks" value="{{ question.marks }}" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="rbt_level" class="col-md-4 col-form-label">RBT Level</label>
+            <div class="col-md-8">
+                <select class="form-control" name="rbt_level" required>
+                    <option value="L1" {% if question.rbt_level == 'L1' %}selected{% endif %}>L1</option>
+                    <option value="L2" {% if question.rbt_level == 'L2' %}selected{% endif %}>L2</option>
+                    <option value="L3" {% if question.rbt_level == 'L3' %}selected{% endif %}>L3</option>
+                    <option value="L4" {% if question.rbt_level == 'L4' %}selected{% endif %}>L4</option>
+                    <option value="L5" {% if question.rbt_level == 'L5' %}selected{% endif %}>L5</option>
+                    <option value="L6" {% if question.rbt_level == 'L6' %}selected{% endif %}>L6</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="co" class="col-md-4 col-form-label">Course Outcome (CO)</label>
+            <div class="col-md-8">
+                <select class="form-control" id="co" name="co" required>
+                    {% for co in course_outcomes %}
+                        <option value="{{ co.id }}" {% if question.co_id == co.id %}selected{% endif %}>{{ co.co_number }} - {{ co.description }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-light rounded-pill px-4 py-2 mt-3 mb-5" style="font-size: 0.9rem;">
+                Save changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

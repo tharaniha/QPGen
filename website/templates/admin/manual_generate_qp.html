@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Generate Question Paper{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592; </a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3 class="text-center">Generate Question Paper</h3>
+    <br />
+    <form id="manual-question-paper-form" method="POST" action="{{ url_for('views.manual_generate_qp') }}" class="transparent-bg mx-auto" style="max-width: 800px;">
+    
+    <div class="container" style="max-width: 600px;">
+        <!-- Examination Type -->
+        <div class="form-group row">
+            <label for="exam_type" class="col-md-4 col-form-label">Examination Type:</label>
+            <div class="col-md-8">
+                <input type="text" name="exam_type" id="exam_type" class="form-control form-control-sm" required placeholder="Enter exam type" value="{{ form_data.exam_type }}">
+           </div>
+        </div>
+
+        <!-- Academic Year -->
+        <div class="form-group row">
+            <label for="academic_year" class="col-md-4 col-form-label">Academic Year:</label>
+            <div class="col-md-8">
+                <select name="academic_year" id="academic_year" class="form-control form-control-sm" required>
+                    <option value="">-Select Academic Year-</option>
+                    <option value="{{ (current_year - 1) | string }}-{{ current_year | string }}" {% if form_data.academic_year == ((current_year - 1) | string) ~ '-' ~ (current_year | string) %}selected{% endif %}>
+                        {{ current_year - 1 }}-{{ current_year }}
+                    </option>              
+                    <option value="{{ current_year }}-{{ current_year + 1 }}" {% if form_data.academic_year == (current_year | string) ~ '-' ~ ((current_year + 1) | string) %}selected{% endif %}>
+                        {{ current_year }}-{{ current_year + 1 }}
+                    </option>               
+                </select>
+            </div>
+        </div>
+
+        <!-- Examination Date -->
+        <div class="form-group row">
+            <label for="exam_date" class="col-md-4 col-form-label">Examination Date:</label>
+            <div class="col-md-4">
+                <input type="date" name="exam_date" id="exam_date" class="form-control form-control-sm" required value="{{ form_data.exam_date }}">
+            </div>
+        </div>
+
+        <!-- Start Time -->
+        <div class="form-group row">
+            <label for="start_time" class="col-md-4 col-form-label">Start Time:</label>
+            <div class="col-md-4">
+                <input type="time" name="start_time" id="start_time" class="form-control form-control-sm" required value="{{ form_data.start_time }}">
+            </div>
+        </div>
+
+        <!-- Duration -->
+        <div class="form-group row">
+            <label for="duration" class="col-md-4 col-form-label">Duration (in hours):</label>
+            <div class="col-md-4">
+                <input type="number" name="duration" id="duration" class="form-control form-control-sm" required min="1" placeholder="Enter hours" value="{{ form_data.duration }}">
+            </div>
+        </div>
+
+        <!-- Max Marks -->
+        <div class="form-group row">
+            <label for="max_marks" class="col-md-4 col-form-label">Max Marks:</label>
+            <div class="col-md-4">
+                <input type="number" name="max_marks" id="max_marks" class="form-control form-control-sm" required placeholder="Enter max marks" value="{{ form_data.max_marks }}">
+            </div>
+        </div>
+
+        <!-- Subject Selection -->
+        <div class="form-group row">
+            <label for="subject" class="col-md-4 col-form-label">Subject:</label>
+            <div class="col-md-8">
+                <select name="subject" id="subject" class="form-control form-control-sm" required onchange="this.form.submit()">
+                    <option value="">-Select Subject-</option>
+                    {% for subject in subjects %}
+                        <option value="{{ subject.code }}" {% if form_data.subject_code == subject.code %}selected{% endif %}>
+                            {{ subject.name }} ({{ subject.code }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Module-wise Questions -->
+    {% if questions_by_module %}
+        {% for module, questions in questions_by_module.items() %}
+            <div class="module-section">
+                <h5 class="text-center">Module {{ module }}</h5>
+                {% if questions %}
+                    <ul class="list-group mb-3">
+                        {% for question in questions %}
+                            <li 
+                                class="list-group-item d-flex justify-content-between align-items-center flex-wrap" 
+                                style="border: 0.1rem solid aliceblue; background-color: transparent;"
+                            >
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <input 
+                                        type="checkbox" 
+                                        style="transform: scale(1.5);" 
+                                        name="selected_questions" 
+                                        value="{{ question.id }}" 
+                                        id="question-{{ question.id }}"
+                                    >
+                                    <label class="px-3 mt-1" for="question-{{ question.id }}">
+                                        {{ question.content }}
+                                    </label>
+                                </div>
+                                <span class="mt-1 mt-md-0">{{ question.marks }} marks</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted text-center">No questions available for this module.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+
+    <!-- Submit Button -->
+    {% if questions_by_module %}
+        <input type="hidden" name="action" value="manual-generate-qp">
+        <div class="form-group d-flex justify-content-end">          
+            <button type="submit" name="output_format" value="pdf" class="btn btn-outline-light rounded-pill px-4 py-2 mb-5 mr-3" style="font-size: 0.9rem;" id="generate-qp-btn">Generate PDF</button>
+            <button type="submit" name="output_format" value="word" class="btn btn-outline-light rounded-pill px-4 py-2 mb-5" style="font-size: 0.9rem;" id="generate-qp-btn">Generate word</button>
+        </div>
+    {% endif %}
+</form>
+
+
+{% endblock %}

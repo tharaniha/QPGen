@@ -1,0 +1,36 @@
+
+
+body {
+    color: aliceblue;
+    background: 
+        radial-gradient(
+            circle at top right, /* Circular gradient at the top-right */
+            rgba(122, 199, 220, 0.459) 0%, 
+            rgba(104, 142, 172, 0) 65%
+        ),
+        radial-gradient(
+            circle at left, /* Circular gradient at the bottom-left */
+            rgba(194, 133, 174, 0.35) 0%, 
+            rgba(144, 109, 132, 0) 55%
+        );    
+    background-color: rgba(7, 0, 49, 1) ;
+    background-attachment: fixed; /* Makes the background stay in place on scroll */    
+    
+}
+
+.back-button {
+    font-size: 2rem;
+    color: aliceblue !important;
+}
+
+.navbar-nav .nav-link {
+    color: aliceblue !important;
+}
+
+.form-label {
+    color: aliceblue;
+}
+
+
+  
+

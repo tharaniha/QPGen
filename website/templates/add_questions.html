@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %} {{ subject.name }} {% endblock %}
+
+{% block backbutton %}
+    {% if current_user.is_admin %}
+        <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592; </a>
+    {% else %}
+        <a class="btn back-button ml-2" href="/teacher_dashboard"> &#8592; </a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Add Question Form -->
+    <form method="POST" class="col-md-10 mx-auto mb-5" enctype="multipart/form-data">
+        <div class="form-group row">
+            <label for="module_no" class="col-md-4 col-form-label">Module Number</label>
+            <div class="col-md-8">
+                <select class="form-control" id="module_no" name="module_no" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="content" class="col-md-4 col-form-label">Question Text</label>
+            <div class="col-md-8">
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="Enter Question" required></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="marks" class="col-md-4 col-form-label">Marks</label>
+            <div class="col-md-8">
+                <input type="number" class="form-control" id="marks" name="marks" placeholder="Enter Marks" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="rbt_level" class="col-md-4 col-form-label">RBT Level</label>
+            <div class="col-md-8">
+                <select class="form-control" id="rbt_level" name="rbt_level" required>
+                    <option value="L1">L1</option>
+                    <option value="L2">L2</option>
+                    <option value="L3">L3</option>
+                    <option value="L4">L4</option>
+                    <option value="L5">L5</option>
+                    <option value="L6">L6</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="co" class="col-md-4 col-form-label">Course Outcome (CO)</label>
+            <div class="col-md-8">
+                <select class="form-control" id="co" name="co" required>
+                    {% for co in course_outcomes %}
+                        <option value="{{ co.id }}">{{ co.co_number }} - {{ co.description }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="images" class="col-md-4 col-form-label">Upload Images</label>
+            <div class="col-md-8">
+                <input type="file" class="form-control" id="images" name="images" accept="image/*" multiple>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-light rounded-pill px-4 py-2 mt-3 mb-5" style="font-size: 0.9rem;">
+                Add Question
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

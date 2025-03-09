@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Edit Subject{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/view_subjects"> &#8592; </a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3 class="mb-4 text-center">Edit subject Details</h3>
+    <form method="POST" class="col-md-10 mx-auto mb-5">
+        <div class="form-group row">
+            <label for="code" class="col-md-4 col-form-label">Subject Code:</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="code" name="code" value="{{ subject.code }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="name" class="col-md-4 col-form-label">Subject Name:</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="name" name="name" value="{{ subject.name }}" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="semester" class="col-md-4 col-form-label">Semester:</label>
+            <div class="col-md-8">
+                <select class="form-control" id="semester" name="semester">
+                    <option value="1" {% if subject.semester == 1 %}selected{% endif %}>1</option>
+                    <option value="2" {% if subject.semester == 2 %}selected{% endif %}>2</option>
+                    <option value="3" {% if subject.semester == 3 %}selected{% endif %}>3</option>
+                    <option value="4" {% if subject.semester == 4 %}selected{% endif %}>4</option>
+                    <option value="5" {% if subject.semester == 5 %}selected{% endif %}>5</option>
+                    <option value="6" {% if subject.semester == 6 %}selected{% endif %}>6</option>
+                    <option value="7" {% if subject.semester == 7 %}selected{% endif %}>7</option>
+                    <option value="8" {% if subject.semester == 8 %}selected{% endif %}>8</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="department" class="col-md-4 col-form-label">Department:</label>
+            <div class="col-md-8">
+                <select class="form-control" id="department" name="department">
+                    <option value="Computer Science and Engineering (CSE)" {% if subject.department == "Computer Science and Engineering (CSE)" %}selected{% endif %}>Computer Science and Engineering (CSE)</option>
+                    <option value="Electronics and Communication Engineering (ECE)" {% if subject.department == "Electronics and Communication Engineering (ECE)" %}selected{% endif %}>Electronics and Communication Engineering (ECE)</option>
+                    <option value="Electrical and Electronics Engineering (EEE)" {% if subject.department == "Electrical and Electronics Engineering (EEE)" %}selected{% endif %}>Electrical and Electronics Engineering (EEE)</option>
+                    <option value="Mechanical Engineering" {% if subject.department == "Mechanical Engineering" %}selected{% endif %}>Mechanical Engineering</option>
+                    <option value="Civil Engineering" {% if subject.department == "Civil Engineering" %}selected{% endif %}>Civil Engineering</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="academic_year" class="col-md-4 col-form-label">Academic Year:</label>
+            <div class="col-md-8">
+                <input type="number" class="form-control" id="academic_year" name="academic_year" value="{{ subject.academic_year }}" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="regulations" class="col-md-4 col-form-label">Regulations:</label>
+            <div class="col-md-8">
+                <input type="text" class="form-control" id="regulations" name="regulations" value="{{ subject.regulations }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group ">
+            <label class="form-label mb-3">Course Outcomes (COs)</label>
+            {% for co in course_outcomes %}
+            <div class="form-group row">
+                <!-- CO Number -->
+                <div class="col-md-2">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="co_number{{ loop.index }}" 
+                        name="co_number[]" 
+                        value="{{ co.co_number }}" 
+                        readonly 
+                    />
+                </div>
+            
+                <!-- CO Description -->
+                <div class="col-md-8">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="co_description{{ loop.index }}" 
+                        name="co_description[]" 
+                        value="{{ co.description }}" 
+                        placeholder="Enter CO description" 
+                    />
+                </div>
+            
+                <!-- Remove Checkbox -->
+                <div class="col-md-1 d-flex align-items-end">
+                    <div class="form-check">
+                        <input 
+                            type="checkbox" 
+                            class="form-check-input" 
+                            id="remove_co{{ loop.index }}" 
+                            name="remove_co[]" 
+                            value="{{ co.id }}" 
+                        />
+                        <label class="form-check-label" for="remove_co{{ loop.index }}">Remove</label>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Add New COs -->
+         
+        <label class="form-label mb-3">Add Course Outcomes (COs)</label>
+        <div id="new-co-fields">
+            {% set new_co_count = 6 - course_outcomes|length %}
+            {% if new_co_count > 0 %}
+                {% for i in range(1, new_co_count + 1) %}
+                <div class="form-group row">
+                    <!-- CO Number -->
+                    <div class="col-md-2">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="new_co_number{{ i }}" 
+                            name="new_co_number[]" 
+                            value="CO{{ course_outcomes|length + i }}" 
+                            readonly 
+                        />
+                    </div>
+            
+                    <!-- CO Description -->
+                    <div class="col-md-8">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="new_co_description{{ i }}" 
+                            name="new_co_description[]" 
+                            placeholder="Add Description" 
+                        />
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="text-right">
+            <button type="submit" name="action" value="edit-subject" class="btn btn-outline-light rounded-pill px-3 py-2 mb-5 mt-3" style="font-size: 0.9rem;">Save Changes</button>
+        </div>
+        <br />
+    </form>
+</div>
+{% endblock %}

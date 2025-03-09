@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Add Subject{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592;  </a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="POST" class="col-md-8 mx-auto mb-5">
+        <h3 align="center">Enter details</h3>
+        <br />
+        <div class="form-group d-flex align-items-center">
+            <label for="code" class="col-md-4">Subject code</label>
+            <input 
+                type="text" 
+                class="form-control col-md-8" 
+                id="code" 
+                name="code" 
+                placeholder="Enter subject code" 
+            />
+        </div>
+        
+        <div class="form-group d-flex align-items-center">
+            <label for="name" class="col-md-4">Name</label>
+            <input 
+                type="text" 
+                class="form-control col-md-8" 
+                id="name" 
+                name="name" 
+                placeholder="Enter name" 
+            />
+        </div>
+
+        <div class="form-group d-flex align-items-center">
+            <label for="sem" class="col-md-4">Semester</label>
+            <select class="form-control col-md-8" id="sem" name="sem">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+            </select>
+        </div>
+
+        <div class="form-group d-flex align-items-center">
+            <label for="dept" class="col-md-4">Department</label>
+            <select class="form-control col-md-8" id="dept" name="dept">
+                <option value="Computer Science and Engineering (CSE)">Computer Science and Engineering (CSE)</option>
+                <option value="Electronics and Communication Engineering (ECE)">Electronics and Communication Engineering (ECE)</option>
+                <option value="Electrical and Electronics Engineering (EEE)">Electrical and Electronics Engineering (EEE)</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+            </select>
+        </div>
+
+        <div class="form-group d-flex align-items-center">
+            <label for="year" class="col-md-4">Academic year</label>
+            <input 
+                type="number" 
+                class="form-control col-md-8" 
+                id="year" 
+                name="year" 
+                placeholder="Enter academic year" 
+            />
+        </div>
+
+        <div class="form-group d-flex align-items-center">
+            <label for="reg" class="col-md-4">Regulations</label>
+            <input 
+                type="text" 
+                class="form-control col-md-8" 
+                id="reg" 
+                name="reg" 
+                placeholder="Enter regulations" 
+            />
+        </div>
+
+        <!-- Dynamic CO Input -->
+        <div class="form-group">
+            <label class="col-md-4">Course Outcomes (COs)</label>
+            <br />
+            <div id="co-container" class="ml-4">
+                <div class="co-group mb-3 d-flex align-items-center" id="co1-group">
+                    <!-- CO Number -->
+                    <label for="co_number1" class="col-md-2">CO No.</label>
+                    <input 
+                        type="text" 
+                        class="form-control col-md-2" 
+                        id="co_number1" 
+                        name="co_number[]" 
+                        value="CO1" 
+                        readonly 
+                    />
+                    <label for="co_description1" class="col-md-2">Description</label>
+                    <input 
+                        type="text" 
+                        class="form-control col-md-6" 
+                        id="co_description1" 
+                        name="co_description[]" 
+                        placeholder="Enter CO1 description" 
+                    />
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-outline-light rounded-pill  px-2.5 py-1" style="font-size: 0.9rem;" id="add-co-button">+</button>
+            </div>
+        </div>
+        
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-light rounded-pill px-4 py-2 mt-3 mb-5">
+                Add Subject
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let coCount = 1; // Initial CO count
+
+    // Function to add new CO fields
+    document.getElementById("add-co-button").addEventListener("click", function () {
+        if (coCount < 6) {  // Check if the current CO count is less than 6
+            coCount++;
+            const coContainer = document.getElementById("co-container");
+
+            // Create new CO field group with the specified layout
+            const newCOGroup = document.createElement("div");
+            newCOGroup.classList.add("co-group", "mb-3", "d-flex", "align-items-center");
+            newCOGroup.id = `co${coCount}-group`;
+
+            // Set inner HTML with new CO fields
+            newCOGroup.innerHTML = `
+                <!-- CO Number -->
+                <label for="co_number${coCount}" class="col-md-2">CO No.</label>
+                <input 
+                    type="text" 
+                    class="form-control col-md-2" 
+                    id="co_number${coCount}" 
+                    name="co_number[]" 
+                    value="CO${coCount}" 
+                    readonly 
+                />
+                <label for="co_description${coCount}" class="col-md-2">Description</label>
+                <input 
+                    type="text" 
+                    class="form-control col-md-5" 
+                    id="co_description${coCount}" 
+                    name="co_description[]" 
+                    placeholder="Enter CO${coCount} description" 
+                />
+            `;
+
+            // Append new CO group to the container
+            coContainer.appendChild(newCOGroup);
+        } else {
+            // Optionally, alert the user or disable the add button
+            alert('You can add a maximum of 6 Course Outcomes (COs).');
+        }
+    });
+</script>
+
+
+
+{% endblock %}

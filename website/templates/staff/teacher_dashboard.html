@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block navbar %}
+    <!-- Moderator function -->
+    {% if user.is_mod %}
+    <li class="nav-item dropdown mr-5">
+        <a class="nav-link dropdown-toggle" href="#" id="viewQuestionsDropdown" role="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Verify Questions
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="viewQuestionsDropdown">
+            {% for subject in department_subjects %}
+            <a class="dropdown-item" href="/mod_questions/{{ subject.id }}">
+                {{ subject.name }} ({{ subject.code }})
+            </a>
+            {% endfor %}
+        </div>
+    </li>
+    {% endif %}
+
+    <!-- Add questions -->
+    <li class="nav-item dropdown mr-5">
+        <a class="nav-link dropdown-toggle" href="#" id="addQuestionsDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Add Questions
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addQuestionsDropdown">
+            {% for subject in user.subjects %}
+            <a class="dropdown-item" href="/add_questions/{{ subject.id }}">
+                {{ subject.name }} ({{ subject.code }})
+            </a>
+            {% endfor %}
+        </div>
+    </li>
+
+    <!-- View questions -->
+    <li class="nav-item dropdown mr-5">
+        <a class="nav-link dropdown-toggle" href="#" id="viewQuestionsDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            View Questions
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="viewQuestionsDropdown">
+            {% for subject in user.subjects %}
+            <a class="dropdown-item" href="/view_questions/{{ subject.id }}">
+                {{ subject.name }} ({{ subject.code }})
+            </a>
+            {% endfor %}
+        </div>
+    </li>
+
+    <!-- My profile -->
+    <li class="nav-item mr-5">
+        <a class="nav-link" href="{{ url_for('views.profile') }}">My Profile</a>
+    </li>
+
+    <!-- Logout -->
+    <a class="nav-item nav-link mr-5" id="logout" href="/logout">Logout</a>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Welcome to the Teacher Dashboard</h1>
+{% endblock %}

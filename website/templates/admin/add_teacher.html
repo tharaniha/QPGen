@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Add teacher{% endblock %}
+
+{% block backbutton %}
+    <a class="btn back-button ml-2" href="/admin_dashboard"> &#8592;  </a>
+{% endblock %}
+
+{% block content %}
+<form method="POST" class="col-md-8 mx-auto mb-5">
+    <h3 align="center">Enter details</h3>
+    <br />
+    
+    <div class="form-group row">
+        <label for="name" class="col-md-4 col-form-label">Name</label>
+        <div class="col-md-8">
+            <input 
+                type="text" 
+                class="form-control" 
+                id="name" 
+                name="name" 
+                placeholder="Enter name" 
+            />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="email" class="col-md-4 col-form-label">Email Address</label>
+        <div class="col-md-8">
+            <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email" 
+                placeholder="Enter email" 
+            />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="password1" class="col-md-4 col-form-label">Password</label>
+        <div class="col-md-8">
+            <input 
+                type="password" 
+                class="form-control" 
+                id="password1" 
+                name="password1" 
+                placeholder="Enter password" 
+            />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="password2" class="col-md-4 col-form-label">Password (Confirm)</label>
+        <div class="col-md-8">
+            <input 
+                type="password" 
+                class="form-control" 
+                id="password2" 
+                name="password2" 
+                placeholder="Confirm password" 
+            />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="is_admin" class="col-md-4 col-form-label">Give admin power?</label>
+        <div class="col-md-8">
+            <select class="form-control" id="is_admin" name="is_admin">
+                <option value=False>No</option>
+                <option value=True>Yes</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="designation" class="col-md-4 col-form-label">Designation</label>
+        <div class="col-md-8">
+            <select class="form-control" id="designation" name="designation">
+                <option value="Professor">Professor</option>
+                <option value="Assistant Professor">Assistant Professor</option>
+                <option value="Hod">Hod</option>
+                <option value="Lecturer">Lecturer</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="dept" class="col-md-4 col-form-label">Department</label>
+        <div class="col-md-8">
+            <select class="form-control" id="dept" name="dept">
+                <option value="Computer Science and Engineering (CSE)">Computer Science and Engineering (CSE)</option>
+                <option value="Electronics and Communication Engineering (ECE)">Electronics and Communication Engineering (ECE)</option>
+                <option value="Electrical and Electronics Engineering (EEE)">Electrical and Electronics Engineering (EEE)</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="is_mod" class="col-md-4 col-form-label">Give moderator power?</label>
+        <div class="col-md-8">
+            <select class="form-control" id="is_mod" name="is_mod">
+                <option value=False>No</option>
+                <option value=True>Yes</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="exp" class="col-md-4 col-form-label">Experience</label>
+        <div class="col-md-8">
+            <input 
+                type="number" 
+                class="form-control" 
+                id="exp" 
+                name="exp" 
+                placeholder="Enter experience (years)" 
+            />
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-outline-light rounded-pill px-4 py-2 mt-3 mb-5" style="font-size: 0.9rem;">
+            Add Teacher
+        </button>
+    </div>
+</form>
+{% endblock %}

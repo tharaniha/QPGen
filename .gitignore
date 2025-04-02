@@ -6,9 +6,12 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Ignore environment variables
-.env
 
 # Ignore log files and temporary files
-*.log
 *.sqlite3
+*.swp
+*.swo
+*.log
+docker-compose.override.yml
+.dockerignore
+

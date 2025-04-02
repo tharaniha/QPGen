@@ -1,11 +1,7 @@
-# from waitress import serve
 from website import create_app
 
 app = create_app()
 
 if __name__ == "__main__":
-    #app.run(host="0.0.0.0", port=8000, debug=False)
-    app.run(debug=True)
-
-
-
+    # For Docker, use host 0.0.0.0 and port 5000
+    app.run(host="0.0.0.0", port=5000, debug=True)

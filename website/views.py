@@ -828,14 +828,73 @@ def auto_generate_qp():
             )
 
         elif output_format == 'word':
-            from html2docx import html2docx
-            # Convert HTML to DOCX using html2docx, which returns a BytesIO object.
-            doc_stream = html2docx(html, title=f"{subject.name} - {exam_type} Exam")
-            doc_stream.seek(0)
+            # Create Document
+            doc = Document()
+
+            image_path = os.path.join(os.getcwd(), 'website', 'static', 'images', 'uni.png')
+            doc.add_picture(image_path, width=Inches(6))
+            if doc.paragraphs:
+                last_paragraph = doc.paragraphs[-1]
+                last_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+
+            heading = doc.add_paragraph('Department of Computer Science and Engineering')
+            heading.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+            heading.runs[0].bold = True
+            heading.runs[0].font.size = Pt(14)
+
+            # Add Exam Info
+            doc.add_paragraph(f"{exam_type} – {academic_year}", style='Heading 2').alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+            doc.add_paragraph(f"Course Code: {subject.code} \t\t Maximum Marks: {'max_marks'}")
+            doc.add_paragraph(f"Date: {'exam_date'} \t\t Time: {'start_time'} - Duration: {'duration'} hours")
+
+            # Add Note
+            note = doc.add_paragraph('NOTE: ')
+            note.add_run('Answer All Questions').bold = True
+
+            # Create Table for Questions
+            table = doc.add_table(rows=1, cols=5)
+            table.style = 'Table Grid'
+
+            table.columns[0].width = Cm(0.001)  
+            table.columns[1].width = Cm(20) 
+            table.columns[2].width = Cm(0.001)  
+            table.columns[3].width = Cm(0.001)  
+            table.columns[4].width = Cm(0.001) 
+
+            headers = ['Q#', 'Question', 'Marks', 'BL', 'CO']
+            for i, header in enumerate(headers):
+                cell = table.cell(0, i)
+                cell.text = header
+                cell.paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+                cell.paragraphs[0].runs[0].bold = True
+
+            # Add Questions to Table
+            question_number = 1
+            for module, questions in questions_by_module.items():
+                for question in questions:
+                    row_cells = table.add_row().cells
+                    row_cells[0].text = str(question_number)  # Q#
+                    row_cells[1].text = question.content  # Question
+                    row_cells[2].text = str(question.marks)  # Marks
+                    row_cells[3].text = question.rbt_level  # BL (Bloom's Level)
+                    row_cells[4].text = str(question.co_id)  # CO (Course Outcome)
+                    question_number += 1
+                               
+            # Prepared and Approved Section
+            doc.add_paragraph("\nPrepared By: Dr Loganathan R\t\tApproved By: The Principal")
+
+            # Save to Memory Buffer
+            buffer = BytesIO()
+            doc.save(buffer)
+            buffer.seek(0)
+
+            # Send as Response
             return send_file(
-                doc_stream,
+                buffer,
                 download_name=f"{subject.name}_QuestionPaper.docx",
-                as_attachment=True
+                as_attachment=True,
+                mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             )
 
     # For GET request, render the form

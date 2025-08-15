@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+
+  flask:
+    build: .
+    container_name: flask-app
+    restart: always
+    env_file:
+      - .env
+    environment:    
+      - FLASK_APP=main.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_DEBUG=1
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+      - .:/app
+    command: ["sh", "-c", "while ! mysql -h mysql -uroot -p${DB_PASSWORD} -e 'SELECT 1'; do echo 'Waiting for MySQL'; sleep 2; done; flask run --host=0.0.0.0"]
+
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - flask
+
+volumes:
+  mysql-data:
